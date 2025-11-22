@@ -57,21 +57,26 @@ docker push <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/ecs-ecr-demo-2
 ## Step 7: Deploy with ECS Express Mode
 
 1. Go to AWS ECS Console
-2. Click "Create Cluster"
-3. Select "Express Mode"
+2. Select "Express Mode"
 4. Choose your ECR image: `ecs-ecr-demo-2025:latest`
-5. Configure:
+5. Configure (opitional)
    - Container port: 80
-   - Enable public IP
-   - Optional: Enable HTTPS with Application Load Balancer
+   - Autoscaling
+   - Env variables
+   - Networking
+   - logging
 6. Click "Create"
 
 ECS Express Mode will automatically:
 - Create VPC and networking
 - Set up security groups
-- Configure load balancer (if HTTPS enabled)
+- Configures load balancer with target groups , listeners & rules .
 - Deploy your container
 - Provide a public endpoint
+
+##Blog 
+
+![For more info](http://dev.to/aws-builders/from-image-to-https-endpoint-in-one-step-with-ecs-express-mode-1oi2)
 
 ## Local Testing
 
@@ -98,21 +103,5 @@ The demo application displays:
 - **Port**: 80 (nginx default)
 - **Content**: Static HTML dashboard
 
-## Cleanup
 
-To remove resources:
 
-```bash
-# Delete ECS service and cluster from console or CLI
-aws ecs delete-service --cluster <cluster-name> --service <service-name> --force
-aws ecs delete-cluster --cluster <cluster-name>
-
-# Delete ECR repository
-aws ecr delete-repository --repository-name ecs-ecr-demo-2025 --force --region <your-region>
-```
-
-## Notes
-
-- ECS Express Mode simplifies deployment by handling infrastructure setup
-- For production, consider using Fargate for serverless container management
-- Enable HTTPS in Express Mode for secure endpoints with automatic SSL/TLS
