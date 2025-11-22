@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECS ECR Demo 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .info-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .info-card h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #555;
+        }
+        .info-value {
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+            text-align: right;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #28a745;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 ECS ECR Demo 2025</h1>
+            <p>Container Instance Information Dashboard</p>
+        </div>
+        
+        <div class="content">
+            <div class="info-card">
+                <h2>📡 Network Information</h2>
+                <div class="info-row">
+                    <span class="info-label">Client IP Address:</span>
+                    <span class="info-value" id="clientIp">Loading...</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Server Hostname:</span>
+                    <span class="info-value" id="hostname">N/A</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">User Agent:</span>
+                    <span class="info-value" id="userAgent">N/A</span>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h2>🖥️ Instance Configuration</h2>
+                <div class="info-row">
+                    <span class="info-label">Container Status:</span>
+                    <span class="info-value"><span class="status">Running</span></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Platform:</span>
+                    <span class="info-value" id="platform">N/A</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Screen Resolution:</span>
+                    <span class="info-value" id="resolution">N/A</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Language:</span>
+                    <span class="info-value" id="language">N/A</span>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h2>⏰ System Time</h2>
+                <div class="info-row">
+                    <span class="info-label">Current Time:</span>
+                    <span class="info-value" id="currentTime">N/A</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Timezone:</span>
+                    <span class="info-value" id="timezone">N/A</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Uptime:</span>
+                    <span class="info-value" id="uptime">N/A</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>ECS ECR Demo Application | Deployed via Docker & AWS ECR</p>
+        </div>
+    </div>
+
+    <script>
+        // Get client IP
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('clientIp').textContent = data.ip;
+            })
+            .catch(() => {
+                document.getElementById('clientIp').textContent = 'Unable to fetch';
+            });
+
+        // Get browser/system info
+        document.getElementById('hostname').textContent = window.location.hostname || 'localhost';
+        document.getElementById('userAgent').textContent = navigator.userAgent.substring(0, 50) + '...';
+        document.getElementById('platform').textContent = navigator.platform;
+        document.getElementById('resolution').textContent = `${screen.width}x${screen.height}`;
+        document.getElementById('language').textContent = navigator.language;
+        document.getElementById('timezone').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // Update time
+        const startTime = Date.now();
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleString();
+            
+            const uptime = Math.floor((Date.now() - startTime) / 1000);
+            const hours = Math.floor(uptime / 3600);
+            const minutes = Math.floor((uptime % 3600) / 60);
+            const seconds = uptime % 60;
+            document.getElementById('uptime').textContent = `${hours}h ${minutes}m ${seconds}s`;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>
