@@ -74,7 +74,7 @@ ECS Express Mode will automatically:
 - Deploy your container
 - Provide a public endpoint
 
-##Blog 
+## Blog 
 
 [http://dev.to/aws-builders/from-image-to-https-endpoint-in-one-step-with-ecs-express-mode-1oi2](http://dev.to/aws-builders/from-image-to-https-endpoint-in-one-step-with-ecs-express-mode-1oi2)
 
@@ -102,6 +102,7 @@ The demo application displays:
 - **Base Image**: nginx:alpine (minimal footprint)
 - **Port**: 80 (nginx default)
 - **Content**: Static HTML dashboard
+
 
 
 
